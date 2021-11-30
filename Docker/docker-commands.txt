@@ -1,0 +1,42 @@
+## HOW TO SETUP DOCKER ##
+
+#install docker
+yum install docker -y
+
+#verify docker installed or not
+which docker
+rpm -qa | grep docker
+
+#start docker
+systemctl start docker -> this should fail because storage device is not configured
+
+#list disk on server
+fdisk -l | grep sd
+
+#list volume group on server
+vgs
+
+#create new vg for docker
+vgcreate vg-docker /dev/sdb1
+
+#we DO NOT NEED TO create logical volume. Docker will take care of this.
+vi /etc/sysconfig/docker-storage-setup [enter below config]
+
+#CONFIGURE STORAGE
+DEVS=/dev/sdb
+VG=vg-docker
+DATA_SIZE=15GB
+WIPE_SIGNATURES=true
+
+vi /etc/sysconfig/docker-storage
+
+[make sure to comment it out]
+#DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper --storage-opt dm.fs=xfs --storage-opt dm.thinpooldev=/dev/mapper/vg--docker-docker--pool --storage-opt dm.use_deferred_removal=true "
+
+#validate the thin pool is configured or not
+docker-storage-setup
+
+#run docker storage setup
+docker-storage-setup
+
+systemctl start docker -> this should work because storage device is configured
