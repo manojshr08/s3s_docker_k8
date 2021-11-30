@@ -1,7 +1,7 @@
 #S3S DevOps Kubernetes Team
 
-My first DevOps Git repo
+Hello Team,
+This is where we will collab and work and learn together.
 
-Hello,
-My name is Manoj Shrestha.
+
 
