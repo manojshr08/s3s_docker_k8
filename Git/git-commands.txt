@@ -17,12 +17,14 @@ git commit -m "SOME MESSAGE HERE"
 git push
 
 
-
-#HERE do this:
-#1. Use your Github username
-#2. You must create Personal Token and use as password.
-#	- if you are working on someone-else GitHub Repo, make sure to have them add you
-#	as collaborator
-#Then when working on other's Repo,
-#use your GitHub username and YOUR Personal Token to login.
-
+##########################################################################################
+##########################################################################################
+#HERE do this:                                                                           #  
+#1. Use your Github username                                                             #
+#2. You must create Personal Token and use as password.                                  #
+#	- if you are working on someone-else GitHub Repo, make sure to have them add you #
+#	as collaborator                                                                  #
+#Then when working on other's Repo,                                                      #
+#use your GitHub username and YOUR Personal Token to login.                              #
+##########################################################################################
+##########################################################################################
