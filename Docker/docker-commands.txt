@@ -1,4 +1,4 @@
-## HOW TO SETUP DOCKER ##
+### HOW TO SETUP DOCKER ###
 
 #install docker
 yum install docker -y
