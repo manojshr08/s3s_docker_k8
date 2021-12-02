@@ -31,7 +31,7 @@ WIPE_SIGNATURES=true
 vi /etc/sysconfig/docker-storage
 
 [make sure to comment it out]
-#DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper --storage-opt dm.fs=xfs --storage-opt dm.thinpooldev=/dev/mapper/vg--docker-docker--pool --storage-opt dm.use_deferred_removal=true "
+#DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper --storage-opt dm.fs=xfs --storage-opt dm.thinpooldev=/dev/mapper/vg--docker-docker--pool --storage-opt dm.use_deferred_removal=true"
 
 #validate the thin pool is configured or not
 docker-storage-setup
