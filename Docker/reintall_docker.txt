@@ -1,0 +1,90 @@
+
+#HOW TO REMOVE DOCKER AND ALL OF ITS COMPONENTS, REMOVE (VOLUME GROUP, PHYSICAL VOLUME AND PARTITION) STORAGE AND SETUP FRESH DOCKER - CENTOS
+	
+
+#stop docker
+systemctl stop docker
+
+
+#remove docker and all its components
+yum remove docker \
+              docker-client \
+              docker-client-latest \
+              docker-common \
+              docker-latest \
+              docker-latest-logrotate \
+              docker-logrotate \
+              docker-engine
+
+
+#check if its removed completely or not
+rpm -qa | grep docker -> should return nothing
+
+
+#now remove volume group vg-docker and logical volume associated with it
+vgremove vg-docker /dev/sdb1
+Enter y
+Enter y
+
+
+#Now remove partition sdb1
+fdisk /dev/sdb
+type d
+save the changes
+
+
+#Check to see if the partition sdb1 is deleted or not
+fdisk -l | grep sd         (sdb1 should be removed)
+
+
+—————————————————————————————————————————————————————
+————————————————————————————————————————————————————
+
+
+#Install Fresh Docker and Configure Storage
+yum install docker -y
+	
+
+#verify docker installation
+rpm -qa | grep docker
+	
+#start docker
+systemctl start docker -> this should fail because storage device is not configured
+
+#create a new partition on sdb 
+fdisk -u /dev/sdb
+Type n (for new)
+Hit enter enter enter (for the rest to set default values)
+Type w (save the partition)
+
+#creating physical volume sdb1
+pvcreate /dev/sdb1
+	
+#create new volume group for docker
+vgcreate vg-docker /dev/sdb1
+	
+#we DO NOT NEED TO create logical volume. Docker will take care of this.
+
+#now configure storage setup
+vi  /etc/sysconfig/docker-storage-setup [enter below config]
+	
+STORAGE_DRIVER=devicemapper	
+DEVS=/dev/sdb
+VG=vg-docker
+DATA_SIZE=15GB
+WIPE_SIGNATURES=true
+	
+#docker-storage is automatically created after this setup. No need to edit /etc/sysconfig/docker-storage
+	
+#DOCKER_STORAGE_OPTIONS="--storage-driver devicemapper --storage-opt dm.fs=xfs --storage-opt dm.thinpooldev=/dev/mapper/vg--docker-docker--pool --storage-opt dm.use_deferred_removal=true "
+	
+#validate the thin pool is configured or not
+docker-storage-setup
+	
+systemctl start docker -> this should work because storage device is configured
+
+systemctl status docker -> active and running
+
+docker info -> to check details 
+
+docker run hello-world -> run test image from remote registry
